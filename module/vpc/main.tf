@@ -49,3 +49,40 @@ resource "aws_subnet" "public1_subnet" {
     Name = "public1_subnet"
   }
 }
+
+#---Internet Gateway------------
+
+resource "aws_internet_gateway" "ig" {
+  vpc_id = aws_vpc.vpc.id
+  tags = {
+    Name = "Internet Gateway"
+  }
+}
+
+#-----Route Table------------
+
+resource "aws_route_table" "public_route" {
+  vpc_id = aws_vpc.vpc.id
+  route {
+    gateway_id = aws_internet_gateway.ig.id
+    cidr_block = "0.0.0.0/0"
+  }
+  tags = {
+    Name = "Public Route Table"
+  }
+}
+
+resource "aws_default_route_table" "default_route" {
+  default_route_table_id = aws_vpc.vpc.default_route_table_id
+
+  tags = {
+    Name = "Default Route table"
+  }
+}
+
+resource "aws_route_table_association" "public_route_association" {
+  route_table_id = aws_route_table.public_route.id
+  subnet_id = aws_subnet.public1_subnet.id
+}
+
+
