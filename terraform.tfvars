@@ -5,3 +5,6 @@ subnet_cidr = {
   private2_cidr = "10.0.2.0/24"
   public1_cidr = "10.0.3.0/24"
 }
+
+
+instance_type = "t2.micro"

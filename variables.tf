@@ -5,3 +5,6 @@ variable "vpc_cidr" {
 variable "subnet_cidr" {
   type = map
 }
+
+
+variable "instance_type" {}
