@@ -1,3 +1,7 @@
 variable "alb_sg" {}
 
-variable "ec2_subnet" {}
+variable "vpc_id" {}
+
+variable "subnets" {
+  type = list
+}

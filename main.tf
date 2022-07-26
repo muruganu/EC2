@@ -11,7 +11,7 @@ module "sg" {
 
 module "lt" {
   source = "./module/compute/lt"
-  key_file = file("./file/ec2_key.ppk")
+  key_file = file("./file/ec2_keys.pub")
   user_data = file("./file/userdata.sh")
   instance_type = var.instance_type
 }
@@ -20,10 +20,21 @@ module "asg" {
   source = "./module/compute/asg"
   ec2_lt = module.lt.lt_id
   lt_version = module.lt.lt_version
+  asg_az = [module.vpc.az1_subnet,module.vpc.az2_subnet]
+}
+
+data "aws_subnet_ids" "private" {
+  vpc_id = module.vpc.vpc_id
+  tags = {
+    Name = "*private*"
+ }
 }
 
 module "alb" {
   source = "./module/compute/alb"
   alb_sg = module.sg.public_sg
-  ec2_subnet = [module.vpc.public1_subnet]
+  vpc_id = module.vpc.vpc_id
+  subnets = data.aws_subnet_ids.private.ids
 }
+
+
