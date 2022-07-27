@@ -20,7 +20,7 @@ module "asg" {
   source = "./module/compute/asg"
   ec2_lt = module.lt.lt_id
   lt_version = module.lt.lt_version
-  asg_az = [module.vpc.az1_subnet,module.vpc.az2_subnet]
+  asg_subnet = data.aws_subnet_ids.private.ids
 }
 
 data "aws_subnet_ids" "private" {
