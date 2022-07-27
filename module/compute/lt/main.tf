@@ -22,6 +22,7 @@ resource "aws_launch_template" "lt" {
   key_name = aws_key_pair.ssh_key.id
   user_data = base64encode(var.user_data)
   image_id = data.aws_ami.ec2_image.id
+  security_group_names = ["${var.sg_name}"]
   lifecycle {
     create_before_destroy = true
   }
