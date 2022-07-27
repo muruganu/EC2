@@ -4,15 +4,11 @@ output "vpc_id" {
 }
 
 output "private1_subnet" {
-  value = module.vpc.private1_subnet
-}
-
-output "private2_subnet" {
-  value = module.vpc.private2_subnet
+  value = module.vpc.private_subnet
 }
 
 output "public1_subnet" {
-  value = module.vpc.public1_subnet
+  value = module.vpc.public_subnet
 }
 
 #---Security Group-----------

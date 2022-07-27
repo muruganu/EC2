@@ -15,22 +15,24 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
-#-------Private Subnet------------------
+#-------Private and Public Subnets------------------
 
-resource "aws_subnet" "private1_subnet" {
+resource "aws_subnet" "private_subnet" {
   vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = var.subnet_cidr["private1_cidr"]
+  count = "${length(var.private_cidr)}"
+  cidr_block              = var.private_cidr[count.index]
   map_public_ip_on_launch = false
-  availability_zone       = data.aws_availability_zones.available.names[0]
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
 
   tags = {
     Name = "private_subnet"
   }
 }
 
+/*
 resource "aws_subnet" "private2_subnet" {
   vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = var.subnet_cidr["private2_cidr"]
+  cidr_block              = var.private_cidr["private2_cidr"]
   map_public_ip_on_launch = false
   availability_zone       = data.aws_availability_zones.available.names[1]
 
@@ -38,17 +40,20 @@ resource "aws_subnet" "private2_subnet" {
     Name = "private_subnet"
   }
 }
+*/
 
-resource "aws_subnet" "public1_subnet" {
+resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = var.subnet_cidr["public1_cidr"]
+  count = "${length(var.public_cidr)}"
+  cidr_block              = var.public_cidr[count.index]
   map_public_ip_on_launch = true
-  availability_zone       = data.aws_availability_zones.available.names[0]
+  availability_zone       = data.aws_availability_zones.available.names[count.index]
 
   tags = {
-    Name = "public1_subnet"
+    Name = "public_subnet"
   }
 }
+
 
 #---Internet Gateway------------
 
@@ -82,7 +87,7 @@ resource "aws_default_route_table" "default_route" {
 
 resource "aws_route_table_association" "public_route_association" {
   route_table_id = aws_route_table.public_route.id
-  subnet_id = aws_subnet.public1_subnet.id
+  count = "${length(var.public_cidr)}"
+  subnet_id = "${element(aws_subnet.public_subnet.*.id,count.index)}"
+
 }
-
-

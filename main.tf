@@ -1,7 +1,8 @@
 module "vpc" {
   source = "./module/net/vpc"
   vpc_cidr = var.vpc_cidr
-  subnet_cidr = var.subnet_cidr
+  private_cidr = var.private_cidr
+  public_cidr = var.public_cidr
 }
 
 module "sg" {
@@ -30,11 +31,18 @@ data "aws_subnet_ids" "private" {
  }
 }
 
+data "aws_subnet_ids" "public" {
+  vpc_id = module.vpc.vpc_id
+  tags = {
+    Name = "*public*"
+  }
+}
+
 module "alb" {
   source = "./module/compute/alb"
   alb_sg = module.sg.public_sg
   vpc_id = module.vpc.vpc_id
-  subnets = data.aws_subnet_ids.private.ids
+  subnets = data.aws_subnet_ids.public.ids
 }
 
 
