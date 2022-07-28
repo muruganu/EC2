@@ -39,8 +39,9 @@ data "aws_subnets" "private" {
     name   = "vpc-id"
     values = [module.vpc.vpc_id]
   }
-  tags = {
-    Name = "*private*"
+  filter {
+    name   = "tag:Name"
+    values = ["*private*"] # insert values here
   }
 }
 
@@ -49,8 +50,9 @@ data "aws_subnets" "public" {
     name   = "vpc-id"
     values = [module.vpc.vpc_id]
   }
-  tags = {
-    Name = "*public*"
+  filter {
+    name   = "tag:Name"
+    values = ["*public*"] # insert values here
   }
 }
 
