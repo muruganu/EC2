@@ -34,6 +34,6 @@ resource "aws_lb_target_group_attachment" "asg_attach" {
 }
 */
 resource "aws_autoscaling_attachment" "alb_autoscale" {
-  alb_target_group_arn = aws_lb_target_group.web_servers.arn
+  lb_target_group_arn = aws_lb_target_group.web_servers.arn
   autoscaling_group_name = "${var.asg_id}"
 }
