@@ -1,7 +1,3 @@
-output "ssh_key" {
-  value = aws_key_pair.my_key.id
-}
-
 output "ec2_image" {
   value = data.aws_ami.ec2_image.id
 }

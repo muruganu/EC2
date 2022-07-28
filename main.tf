@@ -12,7 +12,6 @@ module "sg" {
 
 module "lt" {
   source = "./module/compute/lt"
-  key_file = file("./file/mykey.pub")
   instance_type = var.instance_type
   depends_on = [module.vpc]
   sg_name = module.sg.public_sg
